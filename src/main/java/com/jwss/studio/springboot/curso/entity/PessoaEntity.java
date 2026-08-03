@@ -25,6 +25,8 @@ public class PessoaEntity implements Serializable {
 	@Min(value = 18,message = "Idade invávilida")
 	private int idade;
 	private String sexo;
+	@Enumerated(EnumType.STRING)
+	private Cargo cargo;
 	@ManyToOne
 	private ProfissaoEntity profissao;
 
@@ -122,8 +124,14 @@ public class PessoaEntity implements Serializable {
 	public ProfissaoEntity getProfissao() {
 		return profissao;
 	}
-
 	public void setProfissao(ProfissaoEntity profissao) {
 		this.profissao = profissao;
+	}
+	public Cargo getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(Cargo cargo) {
+		this.cargo = cargo;
 	}
 }

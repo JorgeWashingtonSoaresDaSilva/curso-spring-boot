@@ -67,7 +67,7 @@
 		
 		<fieldset>
 			<legend>Cadastro de Pessoas</legend>
-		<div class="row">
+			<div class="row">
 			<br />
 			<!-- CORREÇÃO 2: Adicionada classe do Materialize para estilizar as mensagens de retorno (ex:Salvo com sucesso) -->
 			<div th:each="m : ${msg}" class="card-panel green lighten-4 green-text text-darken-4">
@@ -113,13 +113,23 @@
 						</select>
 						<label for="profissao" class="active">Profissão:</label>
 					</div>
-					</div>
+
 					<!-- Endereço usando ViaCep APi -->
+					<div class="row">
+						<div class="input-field col s12" sec:authorize="hasRole('GERENTE')">
+							<select class="browser-default"   th:field="*{cargo}" id="cargo" >
+								<option value="" disabled selected >--[Selecione]--</option>
+								<option th:each="c : ${T(com.jwss.studio.springboot.curso.entity.Cargo).values()}" th:value="${c}" th:text="${c}"></option>
+
+							</select>
+							<label for="cargo" class="active">Cargo:</label>
+						</div>
 					<div class="input-field col s5">
 					<input placeholder="Infome o cep válido" name="cep" th:field="*{cep}" id="cep" class="validate"
 						required="required">
 					<label for="cep" class="active">Cep:</label>
 					</div>
+
 					<div class="input-field col s5">
 					<input placeholder="Infome a rua" name="rua" th:field="*{rua}" id="rua" class="validate"
 						required="required">
@@ -150,6 +160,8 @@
 						required="required">
 					<label for="ibge" class="active">IBGE:</label>
 					</div>
+					</div>
+				</div>
 					
 
 					
