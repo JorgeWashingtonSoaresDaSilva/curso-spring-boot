@@ -34,6 +34,8 @@ public class PessoaEntity implements Serializable {
 	private Cargo cargo;
 	@ManyToOne
 	private ProfissaoEntity profissao;
+	@Lob
+	private byte[] curriculo;
 
 	private String cep;
     private String rua;
@@ -113,9 +115,7 @@ public class PessoaEntity implements Serializable {
 	public void setTelefones(List<TelefoneEntity> telefones) {
 		this.telefones = telefones;
 	}
-	public String getNumero() {
-		return numero;
-	}
+	public String getNumero() {return numero;}
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
@@ -140,11 +140,13 @@ public class PessoaEntity implements Serializable {
 		this.cargo = cargo;
 	}
 
-	public Date getDataNascimento() {
-		return dataNascimento;
-	}
+	public Date getDataNascimento() {return dataNascimento;}
 
 	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
+
+	public byte[] getCurriculo() {return curriculo;}
+
+	public void setCurriculo(byte[] curriculo) {this.curriculo = curriculo;}
 }

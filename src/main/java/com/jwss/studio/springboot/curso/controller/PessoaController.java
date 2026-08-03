@@ -1,6 +1,7 @@
 package com.jwss.studio.springboot.curso.controller;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jwss.studio.springboot.curso.entity.PessoaEntity;
@@ -54,8 +56,8 @@ public class PessoaController {
 		return modelAndView;
 
 	}
-	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa")
-	public ModelAndView salvar(@Valid PessoaEntity pessoa, BindingResult bindingResult) {
+	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa",consumes = {"multipart/form-data"})
+	public ModelAndView salvar(@Valid PessoaEntity pessoa, BindingResult bindingResult, final MultipartFile file) throws IOException {
 		pessoa.setTelefones(telefoneService.listarTelefones(pessoa.getId()));
 		if(bindingResult.hasErrors()) {
 			ModelAndView modelandView = new ModelAndView("cadastro/cadastropessoa");
@@ -70,6 +72,15 @@ public class PessoaController {
 
 			modelandView.addObject("msg", msg);
 			return modelandView;
+		}
+		if (file.getSize() > 0){
+			pessoa.setCurriculo(file.getBytes());
+		}else {
+			if (pessoa.getId() != null && pessoa.getId() > 0){
+				byte[] curriculoTemp;
+				curriculoTemp = pessoaService.carregaPessoa(pessoa.getId()).get().getCurriculo();
+				pessoa.setCurriculo(curriculoTemp);
+            }
 		}
 		pessoaService.salvar(pessoa);
 

@@ -77,7 +77,8 @@
 			<br />
 
 			<!-- CORREÇÃO 3: Uso do th:action com barra inicial para evitar erros de rotas relativas ao editar -->
-			<form th:action="@{/salvarpessoa}" id="formpessoa" method="post" th:object="${pessoaobj}" class="col s12">
+			<form th:action="@{/salvarpessoa}" id="formpessoa" method="post" th:object="${pessoaobj}" class="col s12"
+				  enctype="multipart/form-data">
 				<div class="row">
 					<div class="input-field col s1">
 						<input  name="id" readonly="readonly" th:field="*{id}" id="id">
@@ -89,7 +90,7 @@
 					</div>
 					
 					
-					<div class="input-field col s2">
+					<div class="input-field col s3">
 						<input placeholder="Infome o Sobrenome da pessoa" name="sobrenome" th:field="*{sobrenome}" id="sobrenome" class="validate"
 							required="required">
 						<label for="sobrenome" class="active">Sobrenome:</label>
@@ -103,8 +104,15 @@
 							   name="dataNascimento" placeholder="Data Nasc.">
 						<label for="dataNascimento" class="active">DataNascimento:</label>
 					</div>
+					<div class="row">
+						<div class="input-field col s4">
+							<label for="file" class="active">Curriculo:</label>
+							<input type="file" id="file" name="file" class="validate">
 
-					<div class="input-field col s2" sec:authorize="hasRole('GERENTE')">
+					</div>
+					</div>
+
+					<div class="input-field col s6" sec:authorize="hasRole('GERENTE')">
 					<select class="browser-default" th:field="*{sexo}" id="sexo">
 						<option value="" disabled selected >--[Selecione]--</option>
 						<option value="MASCULINO" th:text="Masculino" ></option>
@@ -261,11 +269,12 @@
 	    <script>
 
 	        $(document).ready(function() {
+				// calendario js
 				$('#dataNascimento').datepicker({
 					showOthermonths:true,
 					format: 'yyyy-mm-dd'
 				});
-
+				// fim calendario js
 	            function limpa_formulário_cep() {
 	                // Limpa valores do formulário de cep.
 	                $("#rua").val("");
