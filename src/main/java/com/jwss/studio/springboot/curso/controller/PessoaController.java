@@ -73,13 +73,17 @@ public class PessoaController {
 			modelandView.addObject("msg", msg);
 			return modelandView;
 		}
-		if (file.getSize() > 0){
+		if (file.getSize() > 0){// cadastrando um curriculo
 			pessoa.setCurriculo(file.getBytes());
+			pessoa.setTipoFileCurriculo(file.getContentType());
+			pessoa.setNomeFileCurriculo(file.getOriginalFilename());
 		}else {
-			if (pessoa.getId() != null && pessoa.getId() > 0){
-				byte[] curriculoTemp;
-				curriculoTemp = pessoaService.carregaPessoa(pessoa.getId()).get().getCurriculo();
-				pessoa.setCurriculo(curriculoTemp);
+			if (pessoa.getId() != null && pessoa.getId() > 0){// editando um curriculo
+				PessoaEntity  pessoaTemp = pessoaService.carregaPessoa(pessoa.getId()).get();// carrega pessoa do banco
+				// carrega curriculo gravado no banco tip de arquivo, nome do arquivo
+				pessoa.setCurriculo(pessoaTemp.getCurriculo());
+				pessoa.setTipoFileCurriculo(pessoaTemp.getTipoFileCurriculo());
+				pessoa.setNomeFileCurriculo(pessoaTemp.getNomeFileCurriculo());
             }
 		}
 		pessoaService.salvar(pessoa);
