@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!-- Import Google Icon Font -->
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+			<!-- CORREÇÃO 1: Mantido apenas o arquivo .min.css correto para evitar conflitos de estilo -->
+			<link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css" media="screen,projection" />
+
+
+		<!-- Otimização para dispositivos móveis -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta charset="UTF-8">
+		<title>Cadastro Telefones</title>
+		<style type="text/css">
+			table.striped>tbody>tr:nth-child(odd){
+				background-color: rgb(222, 221, 218);
+			}
+			.main-content { margin-top: 30px; }
+			.user-info { background: #e3f2fd; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+		</style>
+	</head>
+	<body>
+		<!-- Barra de Navegação Superior -->
+		<nav class="blue darken-2">
+		    <div class="nav-wrapper container">
+		        <a href="/" class="brand-logo">Jwss	Studios</a>
+		        <a href="#" data-target="mobile-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+		        
+		        <ul class="right hide-on-med-and-down">
+		            <li><a href="/cadastropessoa">Cadastro de Pessoas</a></li>
+		            <li><a href="#!">Relatórios</a></li>
+		            <li>
+		                <a href="/logout" class="btn red waves-effect waves-light" style="margin-left: 15px;">
+		                    Sair
+		                </a>
+		            </li>
+		        </ul>
+		    </div>
+		</nav>
+
+		<!-- Menu Lateral para Celular -->
+		<ul class="sidenav" id="mobile-menu">
+		    <li class="center-align" style="padding: 20px 0; background-color: #1976d2; color: white;">
+		        <h5>Menu Admin</h5>
+		    </li>
+		    <li><a href="/cadastropessoa">Cadastro de Pessoas</a></li>
+		    <li><a href="#!">Relatórios</a></li>
+		    <li class="divider"></li>
+		    <li>
+		        <a href="/logout" class="red-text font-weight-bold">
+		            <i class="material-icons left red-text">exit_to_app</i>Sair do Sistema
+		        </a>
+		    </li>
+		</ul>
+
+		<!-- Conteúdo Principal Envolvido no Container -->
+		<div class="container main-content">
+			<h3>Spring Boot + Thymeleaf + Materialize</h3><br/>
+		<fieldset>
+			<legend>Cadastro de Telefones</legend>
+			
+			<!-- Bloco Informativo com os dados da Pessoa -->
+			<div class="user-info z-depth-1">
+				<div class="row" style="margin-bottom: 0;">
+					<div class="col s12 m3"><strong>ID:</strong> <span th:text="${pessoaobj.id}"></span></div>
+					<div class="col s12 m3"><strong>Nome:</strong> <span th:text="${pessoaobj.nome}"></span></div>
+					<div class="col s12 m3"><strong>Sobrenome:</strong> <span th:text="${pessoaobj.sobrenome}"></span></div>
+					<div class="col s12 m3"><strong>Idade:</strong> <span th:text="${pessoaobj.idade}"></span></div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<a class="btn waves-effect waves-light grey" href="/cadastropessoa">
+					<i class="material-icons left">arrow_back</i>Voltar
+				</a>
+			</div>
+			
+			<!-- Mensagens de validação/sucesso -->
+			<div th:each="m : ${msg}" class="card-panel green lighten-4 green-text text-darken-4">
+				<span th:text="${m}"></span>
+			</div>
+			
+			<!-- Formulário de Cadastro de Telefone -->
+			<div class="row">
+				<form id="formpessoa" th:action="@{/addfonepessoa/{pessoaid}(pessoaid=${pessoaobj.id})}" th:object="${telefoneObj}"
+				      method="post" class="col s12" onsubmit="return validarCampos();">
+					
+					<div class="row">
+						<div class="input-field col s2 m1">
+							<input name="id" readonly="readonly" th:field="*{id}" id="id">
+							<label for="id" class="active">ID:</label>
+						</div>
+						
+						<div class="input-field col s10 m5">
+							<input name="numero" id="numero" th:field="*{numero}" class="validate" autocomplete="off" 
+							placeholder="Infome o número de celular ou telefone" >
+							<label for="numero" class="active">Número:</label>
+						</div>
+						
+						<div class="input-field col s12 m4">
+							<input name="tipo" id="tipo" th:field="*{tipo}" class="validate" placeholder="Ex: Celular, Fixo">
+							<label for="tipo" class="active">Tipo:</label>
+						</div>
+						
+						<div class="input-field col s12 m2" style="padding-top: 5px;">
+							<button class="btn waves-effect waves-light blue" type="submit" style="width: 100%;">
+								Adicionar
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			</fieldset>
+			<fieldset>
+			<!-- Tabela de Telefones Cadastrados -->
+			<table class="striped responsive-table z-depth-1">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Número</th>
+						<th>Tipo</th>
+						<th>Editar</th>
+						<th>Deletar</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="fone : ${telefones}">
+						<td th:text="${fone.id}"></td>
+						<td th:text="${fone.numero}"></td>
+						<td th:text="${fone.tipo}"></td>
+						<td>
+							<a th:href="@{/editarfonepessoa/{telefoneid}/pessoa/{pessoaid}(telefoneid=${fone.id}, pessoaid=${pessoaobj.id})}" class="blue-text">
+								<i class="material-icons left">edit</i>Editar
+							</a>
+						</td>
+						<td>
+							<a th:href="@{/deletarfonepessoa/{telefoneid}(telefoneid=${fone.id})}" class="red-text">
+								<i class="material-icons left">delete</i>Deletar
+							</a>
+						</td>
+					</tr>
+					<!-- Linha informativa caso a pessoa não tenha nenhum telefone gravado -->
+					<tr th:if="${#lists.isEmpty(telefones)}">
+						<td colspan="5" class="center-align grey-text">Nenhum telefone cadastrado para esta pessoa.</td>
+					</tr>
+				</tbody>
+			</table>
+			</fieldset>
+		</div>
+		
+		<!-- CORRIGIDO: Uso do th:src para carregar scripts JS estáticos com segurança no Spring Boot -->
+		<script type="text/javascript" th:src="@{/materialize/js/materialize.min.js}"></script>
+		
+		<script type="text/javascript">
+			// Inicializa o menu responsivo móvel
+			document.addEventListener('DOMContentLoaded', function() {
+				var elems = document.querySelectorAll('.sidenav');
+				M.Sidenav.init(elems);
+			});
+
+			// Validação do lado do cliente mantida e otimizada
+			function validarCampos(){
+				var numero = document.getElementById('numero').value.trim();
+				var tipo = document.getElementById('tipo').value.trim();
+				if(numero === ''){
+					alert('O número deve ser informado');
+					return false;
+				} else if(tipo === ''){
+					alert('O tipo deve ser informado');
+					return false;
+				}
+				return true;
+			}	
+		</script>
+	</body>
+</html>

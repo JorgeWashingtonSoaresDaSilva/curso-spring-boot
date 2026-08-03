@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://w3.org" xmlns:th="http://thymeleaf.org" xmlns:sec="http://thymeleaf.org">
+	<head>
+		<!-- Import Google Icon Font -->
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+			<!-- CORREÇÃO 1: Mantido apenas o arquivo .min.css correto para evitar conflitos de estilo -->
+			<link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css" media="screen,projection" />
+
+
+		<!-- Otimização para dispositivos móveis e codificação de caracteres -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta charset="UTF-8">
+		<title>Nome da Tela - Sistema</title>
+		
+		<style type="text/css">
+			/* Padronização visual para o sistema */
+			table.striped>tbody>tr:nth-child(odd){
+				background-color: rgb(222, 221, 218);
+			}
+			.main-content { margin-top: 30px; margin-bottom: 50px; }
+			.card-panel-custom { padding: 20px; border-radius: 4px; }
+		</style>
+	</head>
+	<body>
+		<!-- 1. BARRA DE NAVEGAÇÃO SUPERIOR (DESKTOP) -->
+		<nav class="blue darken-2">
+		    <div class="nav-wrapper container">
+		        <a href="/" class="brand-logo">Jwss Studios</a>
+		        <a href="#" data-target="mobile-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+		        
+		        <ul class="right hide-on-med-and-down">
+		            <li><a href="/cadastropessoa">Cadastro de Pessoas</a></li>
+		            <li><a href="#!">Relatórios</a></li>
+		            <li>
+		                <a href="/logout" class="btn red waves-effect waves-light" style="margin-left: 15px;">
+		                    Sair
+		                </a>
+		            </li>
+		        </ul>
+		    </div>
+		</nav>
+
+		<!-- 2. MENU LATERAL RESPONSIVO (CELULAR/TABLET) -->
+		<ul class="sidenav" id="mobile-menu">
+		    <li class="center-align" style="padding: 20px 0; background-color: #1976d2; color: white;">
+		        <h5>Menu Admin</h5>
+		    </li>
+		    <li><a href="/cadastropessoa" sec:authorize="hasRole('ADMIN')">Cadastro de Pessoas</a></li>
+		    <li><a href="#!">Relatórios</a></li>
+		    <li class="divider"></li>
+		    <li>
+		        <a href="/logout" class="red-text font-weight-bold">
+		            <i class="material-icons left red-text">exit_to_app</i>Sair do Sistema
+		        </a>
+		    </li>
+		</ul>
+
+		<!-- 3. CONTEÚDO PRINCIPAL (Mantenha tudo dentro deste container) -->
+		<div class="container main-content">
+			
+			<h3>Spring Boot + Thymeleaf + Materialize</h3><br/>
+			<h5>Título da Nova Tela</h5>
+			
+			<!-- Mensagens globais de feedback (Sucesso / Alerta) -->
+			<div th:each="m : ${msg}" class="card-panel green lighten-4 green-text text-darken-4">
+				<span th:text="${m}"></span>
+			</div>
+			
+			<!-- ======================================================= -->
+			<!-- INÍCIO DO SEU CONTEÚDO CUSTOMIZADO                      -->
+			<!-- Cole aqui os seus formulários, tabelas ou gráficos     -->
+			<!-- ======================================================= -->
+			
+			<div class="row card-panel card-panel-custom z-depth-1">
+				<p class="grey-text text-darken-1">
+					Este é um layout base. Use esta estrutura para criar suas próximas páginas mantendo o cabeçalho, menu e rodapé alinhados.
+				</p>
+			</div>
+			
+			<!-- ======================================================= -->
+			<!-- FIM DO SEU CONTEÚDO CUSTOMIZADO                         -->
+			<!-- ======================================================= -->
+
+		</div>
+
+		<!-- 4. SCRIPTS DO MATERIALIZE (Sempre no fim do body com caminho absoluto) -->
+		<script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
+		
+		<script type="text/javascript">
+			// Inicialização automática de componentes do Materialize para todas as telas
+			document.addEventListener('DOMContentLoaded', function() {
+				// Ativa o menu hambúrguer do celular
+				var sideNavElems = document.querySelectorAll('.sidenav');
+				M.Sidenav.init(sideNavElems);
+				
+				// Ativa os selects do Materialize (caso use combos de seleção nas próximas telas)
+				var selectElems = document.querySelectorAll('select');
+				M.FormSelect.init(selectElems);
+				
+				// Ativa efeitos de modais (caso precise abrir janelas de confirmação na tela)
+				var modalElems = document.querySelectorAll('.modal');
+				M.Modal.init(modalElems);
+			});
+		</script>
+	</body>
+</html>

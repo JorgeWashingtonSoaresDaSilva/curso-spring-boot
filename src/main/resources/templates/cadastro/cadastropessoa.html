@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://thymeleaf.org">
+
+<head>
+	<!-- Import Google Icon Font -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!-- Adicionando JQuery -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+	            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+	            crossorigin="anonymous"></script>
+	<!-- CORREÇÃO 1: Mantido apenas o arquivo .min.css correto para evitar conflitos de estilo -->
+	<link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css" media="screen,projection" />
+
+	<!-- Let browser know website is optimized for mobile -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta charset="UTF-8">
+	<title>Cadastro Pessoa</title>
+	<style type="text/css">
+		table.striped>tbody>tr:nth-child(odd) {
+			background-color: rgb(222, 221, 218);
+		}
+
+		/* Ajuste visual fino para afastar o título da barra de navegação */
+		.main-content {
+			margin-top: 30px;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Barra de Navegação Superior -->
+	<nav class="blue darken-2">
+		<div class="nav-wrapper container">
+			<a href="/" class="brand-logo">Jwss Studios</a>
+			<a href="#" data-target="mobile-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+			<ul class="right hide-on-med-and-down">
+				<li class="active"><a href="/cadastropessoa">Cadastro de Pessoas</a></li>
+				
+				<li><a href="#!">Relatórios</a></li>
+				<li>
+					<a href="/logout" class="btn red waves-effect waves-light" style="margin-left: 15px;">
+					Sair</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<!-- Menu Lateral para Dispositivos Móveis (Celular) -->
+	<ul class="sidenav" id="mobile-menu">
+		<li class="center-align" style="padding: 20px 0; background-color: #1976d2; color: white;">
+			<h5>Menu Admin</h5>
+		</li>
+		<li class="active"><a href="/cadastropessoa">Cadastro de Pessoas</a></li>
+		<li><a href="#!">Relatórios</a></li>
+		<li class="divider"></li>
+		<li>
+			<a href="/logout" class="red-text font-weight-bold">
+				<i class="material-icons left red-text">exit_to_app</i>Sair do Sistema
+			</a>
+		</li>
+	</ul>
+
+	<!-- Envolvendo o conteúdo em um container do Materialize para alinhar as margens perfeitamente -->
+	<div class="container main-content">
+		<h3>Spring Boot + Thymeleaf + Materialize</h3><br />
+		
+		<fieldset>
+			<legend>Cadastro de Pessoas</legend>
+		<div class="row">
+			<br />
+			<!-- CORREÇÃO 2: Adicionada classe do Materialize para estilizar as mensagens de retorno (ex:Salvo com sucesso) -->
+			<div th:each="m : ${msg}" class="card-panel green lighten-4 green-text text-darken-4">
+				<span th:text="${m}"></span>
+			</div>
+			<br />
+
+			<!-- CORREÇÃO 3: Uso do th:action com barra inicial para evitar erros de rotas relativas ao editar -->
+			<form th:action="@{/salvarpessoa}" id="formpessoa" method="post" th:object="${pessoaobj}" class="col s12">
+				<div class="row">
+					<div class="input-field col s1">
+						<input  name="id" readonly="readonly" th:field="*{id}" id="id">
+						<label for="id" class="active">ID:</label>
+					</div>
+					<div class="input-field col s3">
+						<input placeholder="Infome o nome da pessoa" name="nome" th:field="*{nome}" id="nome" class="validate" required="required">
+						<label for="nome" class="active">Nome:</label>
+					</div>
+					
+					
+					<div class="input-field col s4">
+						<input placeholder="Infome o Sobrenome da pessoa" name="sobrenome" th:field="*{sobrenome}" id="sobrenome" class="validate"
+							required="required">
+						<label for="sobrenome" class="active">Sobrenome:</label>
+					</div>
+					<div class="input-field col s1" sec:authorize="hasRole('GERENTE')">
+					<input placeholder="Infome a idade da pessoa" name="idade" th:field="*{idade}" id="idade" class="validate" required="required">
+					<label for="idade" class="active">Idade:</label>
+					</div>
+					<div class="input-field col s3" sec:authorize="hasRole('GERENTE')">
+					<select class="browser-default" th:field="*{sexo}" >
+						<option value="" disabled selected >--[Selecione]--</option>
+						<option value="MASCULINO" th:text="Masculino" ></option>
+						<option value="FEMININO" th:text="Feminino"></option>
+					</select>
+					<label for="sexo" class="active">Sexo:</label>
+					</div>
+					</div>
+					<!-- Endereço usando ViaCep APi -->
+					<div class="input-field col s5">
+					<input placeholder="Infome o cep válido" name="cep" th:field="*{cep}" id="cep" class="validate"
+						required="required">
+					<label for="cep" class="active">Cep:</label>
+					</div>
+					<div class="input-field col s5">
+					<input placeholder="Infome a rua" name="rua" th:field="*{rua}" id="rua" class="validate"
+						required="required">
+					<label for="rua" class="active">Rua:</label>
+					</div>
+					<div class="input-field col s5">
+					<input placeholder="Infome o número" name="numero" th:field="*{numero}" id="numero" class="validate"
+						required="required">
+					<label for="numero" class="active">Número:</label>
+					</div>
+					<div class="input-field col s5">
+					<input placeholder="Infome o bairro" name="bairro" th:field="*{bairro}" id="bairro" class="validate"
+						required="required">
+					<label for="bairro" class="active">Bairro:</label>
+					</div>
+					<div class="input-field col s5">
+					<input placeholder="Infome a cidade" name="cidade" th:field="*{cidade}" id="cidade" class="validate"
+						required="required">
+					<label for="cidade" class="active">Cidade:</label>
+					</div>
+					<div class="input-field col s5">
+					<input placeholder="Infome o estado" name="uf" th:field="*{uf}" id="uf" class="validate"
+						required="required">
+					<label for="uf" class="active">Estado:</label>
+					</div>
+					<div class="input-field col s5">
+					<input placeholder="Infome o ibge" name="ibge" th:field="*{ibge}" id="ibge" class="validate"
+						required="required">
+					<label for="ibge" class="active">IBGE:</label>
+					</div>
+					
+
+					
+
+				<div class="row">
+					<div class="input-field col s12">
+						<button class="btn waves-effect waves-light blue" type="submit">Salvar</button>
+						<!-- CORREÇÃO 4: Botão Novo ajustado para limpar o formulário sem submeter a página por engano -->
+						<button class="btn waves-effect waves-light grey" type="button"
+							onclick="window.location.href='/cadastropessoa'">Novo</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		</fieldset>
+		<br/>
+		<fieldset>
+			<legend>Campos de pesquisa</legend>
+		<div class="row">
+			<!-- CORREÇÃO 3: Rota corrigida com th:action="@{/pesquisarpessoa}" -->
+			<form id="pesquisarpessoa"th:action="@{/pesquisarpessoa}" method="post" class="col s12">
+				<div class="row">
+					<div class="input-field col s9 m8">
+						<input placeholder="Digite o nome deseja pesquisar" name="nomepesquisar" id="nomepesquisar" class="validate">
+						<label for="nomepesquisar" class="active">Pesquisa por nome:</label>
+					</div>
+					<div class="input-field col s3 m3">
+					<select class="browser-default" name="sexopesquisa" id="sexopesquisa" >
+						<option value="" selected >--[Todos]--</option>
+						<option value="MASCULINO" th:text="Masculino" ></option>
+						<option value="FEMININO" th:text="Feminino"></option>
+					</select>
+					<label for="sexopesquisa" class="active">Pesquisa sexo</label>
+					</div>
+			
+				
+					<div class="input-field col s12 m12">
+					<button class="btn waves-effect waves-light" type="submit" 
+					onclick="document.getElementById('pesquisarpessoa').method= 'get'">PDF</button>
+					<button class="btn waves-effect waves-light" type="submit">Buscar</button>
+					<a class="btn waves-effect waves-light green" href="/cadastropessoa">Listar Todos</a>
+					</div>
+					</div>
+				
+			</form>
+		</div>
+		</fieldset>
+		<br/>
+		<fieldset>
+		<table class="striped responsive-table z-depth-1" >
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nome</th>
+					<th>Sobrenome</th>
+					<th>Idade</th>
+					<th>Editar</th>
+					<th>Deletar</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pessoa : ${pessoas}">
+					<td th:text="${pessoa.id}"></td>
+					<!-- CORREÇÃO 5: Links parametrizados usando a sintaxe segura do Thymeleaf @{/...} -->
+					<td><a th:href="@{/telefones/{idpessoa}(idpessoa=${pessoa.id})}"><span
+								th:text="${pessoa.nome}"></span></a></td>
+					<td th:text="${pessoa.sobrenome}"></td>
+					<td th:text="${pessoa.idade}"></td>
+					<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}" class="blue-text"><i
+								class="material-icons left">edit</i>Editar</a></td>
+					<td><a th:href="@{/deletarpessoa/{idpessoa}(idpessoa=${pessoa.id})}" class="red-text">
+						<i class="material-icons left">delete</i>Deletar</a></td>
+				</tr>
+			</tbody>
+		</table>
+		</fieldset>
+	</div>
+
+	<!-- CORREÇÃO 1: Removidas as importações duplicadas e caminhos relativos errados do JS -->
+	<script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var elems = document.querySelectorAll('.sidenav');
+			M.Sidenav.init(elems);
+		});
+	</script>
+	<!-- Adicionando Javascript -->
+	    <script>
+
+	        $(document).ready(function() {
+
+	            function limpa_formulário_cep() {
+	                // Limpa valores do formulário de cep.
+	                $("#rua").val("");
+					$("#numero").val("");
+	                $("#bairro").val("");
+	                $("#cidade").val("");
+	                $("#uf").val("");
+	                $("#ibge").val("");
+	            }
+	            
+	            //Quando o campo cep perde o foco.
+	            $("#cep").blur(function() {
+
+	                //Nova variável "cep" somente com dígitos.
+	                var cep = $(this).val().replace(/\D/g, '');
+
+	                //Verifica se campo cep possui valor informado.
+	                if (cep != "") {
+
+	                    //Expressão regular para validar o CEP.
+	                    var validacep = /^[0-9]{8}$/;
+
+	                    //Valida o formato do CEP.
+	                    if(validacep.test(cep)) {
+
+	                        //Preenche os campos com "..." enquanto consulta webservice.
+	                        $("#rua").val("...");
+	                        $("#bairro").val("...");
+	                        $("#cidade").val("...");
+	                        $("#uf").val("...");
+	                        $("#ibge").val("...");
+
+	                        //Consulta o webservice viacep.com.br/
+	                        $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+	                            if (!("erro" in dados)) {
+	                                //Atualiza os campos com os valores da consulta.
+	                                $("#rua").val(dados.logradouro);
+	                                $("#bairro").val(dados.bairro);
+	                                $("#cidade").val(dados.localidade);
+	                                $("#uf").val(dados.uf);
+	                                $("#ibge").val(dados.ibge);
+	                            } //end if.
+	                            else {
+	                                //CEP pesquisado não foi encontrado.
+	                                limpa_formulário_cep();
+	                                alert("CEP não encontrado.");
+	                            }
+	                        });
+	                    } //end if.
+	                    else {
+	                        //cep é inválido.
+	                        limpa_formulário_cep();
+	                        alert("Formato de CEP inválido.");
+	                    }
+	                } //end if.
+	                else {
+	                    //cep sem valor, limpa formulário.
+	                    limpa_formulário_cep();
+	                }
+	            });
+	        });
+
+	    </script>
+</body>
+
+</html>

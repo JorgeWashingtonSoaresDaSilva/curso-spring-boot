@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Sistema</title>
+    <!-- Importa o seu materialize que já está liberado no Security -->
+    <link rel="stylesheet" href="/materialize/css/materialize.min.css">
+</head>
+<body class="container" style="margin-top: 100px;">
+
+    <div class="row">
+        <div class="col s12 m6 offset-m3 card-panel">
+            <h5 class="center-align">Acesso ao Sistema</h5>
+            
+            <!-- Mensagem de Erro em Português caso erre a senha -->
+            <div th:if="${param.error}" class="card-panel red lighten-4 red-text text-darken-4">
+                Usuário ou senha inválidos.
+            </div>
+            
+            <!-- Mensagem em Português caso clique em deslogar -->
+            <div th:if="${param.logout}" class="card-panel green lighten-4 green-text text-darken-4">
+                Você foi deslogado com sucesso.
+            </div>
+
+            <!-- O Spring Security exige que os campos tenham exatamente os nomes 'username' e 'password' -->
+            <form th:action="@{/login}" method="post">
+                <div class="input-field col s12">
+                    <input id="username" type="text" name="username" required>
+                    <label for="username">Usuário (ex: admin)</label>
+                </div>
+                
+                <div class="input-field col s12">
+                    <input id="password" type="password" name="password" required>
+                    <label for="password">Senha</label>
+                </div>
+                
+                <div class="col s12 center-align" style="margin-bottom: 20px;">
+                    <button class="btn waves-effect waves-light" type="submit">Entrar</button>
+					<a href="/tela" class="btn waves-effect waves-light" style="margin-left: 15px;">Tela Base</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/materialize/js/materialize.min.js"></script>
+</body>
+</html>
