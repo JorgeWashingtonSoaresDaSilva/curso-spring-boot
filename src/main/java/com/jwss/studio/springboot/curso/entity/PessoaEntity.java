@@ -3,12 +3,7 @@ package com.jwss.studio.springboot.curso.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -30,6 +25,8 @@ public class PessoaEntity implements Serializable {
 	@Min(value = 18,message = "Idade invávilida")
 	private int idade;
 	private String sexo;
+	@ManyToOne
+	private ProfissaoEntity profissao;
 
 	private String cep;
     private String rua;
@@ -122,4 +119,11 @@ public class PessoaEntity implements Serializable {
 		this.sexo = sexo;
 	}
 
+	public ProfissaoEntity getProfissao() {
+		return profissao;
+	}
+
+	public void setProfissao(ProfissaoEntity profissao) {
+		this.profissao = profissao;
+	}
 }

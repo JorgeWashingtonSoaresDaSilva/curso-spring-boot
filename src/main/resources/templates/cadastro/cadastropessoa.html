@@ -88,7 +88,7 @@
 					</div>
 					
 					
-					<div class="input-field col s4">
+					<div class="input-field col s2">
 						<input placeholder="Infome o Sobrenome da pessoa" name="sobrenome" th:field="*{sobrenome}" id="sobrenome" class="validate"
 							required="required">
 						<label for="sobrenome" class="active">Sobrenome:</label>
@@ -97,13 +97,21 @@
 					<input placeholder="Infome a idade da pessoa" name="idade" th:field="*{idade}" id="idade" class="validate" required="required">
 					<label for="idade" class="active">Idade:</label>
 					</div>
-					<div class="input-field col s3" sec:authorize="hasRole('GERENTE')">
-					<select class="browser-default" th:field="*{sexo}" >
+					<div class="input-field col s2" sec:authorize="hasRole('GERENTE')">
+					<select class="browser-default" th:field="*{sexo}" id="sexo">
 						<option value="" disabled selected >--[Selecione]--</option>
 						<option value="MASCULINO" th:text="Masculino" ></option>
 						<option value="FEMININO" th:text="Feminino"></option>
 					</select>
 					<label for="sexo" class="active">Sexo:</label>
+					</div>
+					<div class="input-field col s3" sec:authorize="hasRole('GERENTE')">
+						<select class="browser-default"   th:field="*{profissao}" id="profissao" >
+							<option value="" disabled selected >--[Selecione]--</option>
+							<option th:each="p : ${profissoes}" th:value="${p.id}" th:text="${p.nome}"></option>
+
+						</select>
+						<label for="profissao" class="active">Profissão:</label>
 					</div>
 					</div>
 					<!-- Endereço usando ViaCep APi -->

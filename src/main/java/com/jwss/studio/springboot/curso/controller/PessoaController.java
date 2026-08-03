@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.jwss.studio.springboot.curso.repository.ProfissaoRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -33,13 +34,14 @@ public class PessoaController {
 	private final PessoaService pessoaService;
 	private final TelefoneService telefoneService;
 	private final ReportUtilService reportUtilService;
+	private final ProfissaoRepository profissaoRepository;
 
-	PessoaController(PessoaService pessoaService, TelefoneService  telefoneService, ReportUtilService reportUtilService) {
+	PessoaController(PessoaService pessoaService, TelefoneService  telefoneService, ReportUtilService reportUtilService, ProfissaoRepository profissaoRepository) {
 		this.pessoaService = pessoaService;
 		this.telefoneService = telefoneService;
 		this.reportUtilService = reportUtilService;
-
-	}
+        this.profissaoRepository = profissaoRepository;
+    }
 
 	@RequestMapping(method = RequestMethod.GET, value = "/cadastropessoa")
 	public ModelAndView inicio(PessoaEntity pessoa) {
@@ -47,7 +49,7 @@ public class PessoaController {
 
 		Iterable<PessoaEntity> pessoasIt = pessoaService.listarPessoas(pessoa); // carrega as pessoas cadastradas no banco de dados
 		modelAndView.addObject("pessoas", pessoasIt);// adiciona a listas de objetos modelAndView mostra na tela
-
+		modelAndView.addObject("profissoes",profissaoRepository.findAll());
 		modelAndView.addObject("pessoaobj",new PessoaEntity()); // limpa modelAndView com uma pessoaEntity vazia
 		return modelAndView;
 
@@ -72,6 +74,7 @@ public class PessoaController {
 		pessoaService.salvar(pessoa);
 
 		ModelAndView andView = new ModelAndView("cadastro/cadastropessoa");
+		andView.addObject("profissoes",profissaoRepository.findAll());
 		Iterable<PessoaEntity> pessoasIt = pessoaService.listarPessoas(pessoa);
 		andView.addObject("pessoas", pessoasIt);
 		andView.addObject("pessoaobj",new PessoaEntity());
@@ -82,6 +85,7 @@ public class PessoaController {
 	public ModelAndView pessoas(PessoaEntity pessoa) {
 		ModelAndView andView = new ModelAndView("cadastro/cadastropessoa");
 		Iterable<PessoaEntity> pessoasIt = pessoaService.listarPessoas(pessoa);
+		andView.addObject("profissoes",profissaoRepository.findAll());
 		andView.addObject("pessoas", pessoasIt);
 		andView.addObject("pessoaobj",new PessoaEntity());
 		return andView;
@@ -91,6 +95,7 @@ public class PessoaController {
 
 		ModelAndView modelAndView = new ModelAndView("cadastro/cadastropessoa");
 		Optional<PessoaEntity> pessoa = pessoaService.carregaPessoa(idpessoa);
+		modelAndView.addObject("profissoes",profissaoRepository.findAll());
 		modelAndView.addObject("pessoaobj",pessoa.get());
 		return modelAndView;
 	}
