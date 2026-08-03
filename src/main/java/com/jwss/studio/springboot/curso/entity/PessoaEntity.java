@@ -1,12 +1,14 @@
 package com.jwss.studio.springboot.curso.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class PessoaEntity implements Serializable {
@@ -24,6 +26,9 @@ public class PessoaEntity implements Serializable {
 	private String sobrenome;
 	@Min(value = 18,message = "Idade invávilida")
 	private int idade;
+	@DateTimeFormat(pattern = "yyy-MM-dd")
+	@Temporal(TemporalType.DATE)
+	private Date dataNascimento;
 	private String sexo;
 	@Enumerated(EnumType.STRING)
 	private Cargo cargo;
@@ -133,5 +138,13 @@ public class PessoaEntity implements Serializable {
 
 	public void setCargo(Cargo cargo) {
 		this.cargo = cargo;
+	}
+
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 }

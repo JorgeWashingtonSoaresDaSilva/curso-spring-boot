@@ -25,6 +25,7 @@
 			margin-top: 30px;
 		}
 	</style>
+
 </head>
 
 <body>
@@ -97,6 +98,12 @@
 					<input placeholder="Infome a idade da pessoa" name="idade" th:field="*{idade}" id="idade" class="validate" required="required">
 					<label for="idade" class="active">Idade:</label>
 					</div>
+					<div class="input-field col s3">
+						<input id="dataNascimento" type="date" th:field="*{dataNascimento}"
+							   name="dataNascimento" placeholder="Data Nasc.">
+						<label for="dataNascimento" class="active">DataNascimento:</label>
+					</div>
+
 					<div class="input-field col s2" sec:authorize="hasRole('GERENTE')">
 					<select class="browser-default" th:field="*{sexo}" id="sexo">
 						<option value="" disabled selected >--[Selecione]--</option>
@@ -105,21 +112,22 @@
 					</select>
 					<label for="sexo" class="active">Sexo:</label>
 					</div>
-					<div class="input-field col s3" sec:authorize="hasRole('GERENTE')">
-						<select class="browser-default"   th:field="*{profissao}" id="profissao" >
-							<option value="" disabled selected >--[Selecione]--</option>
-							<option th:each="p : ${profissoes}" th:value="${p.id}" th:text="${p.nome}"></option>
 
-						</select>
-						<label for="profissao" class="active">Profissão:</label>
-					</div>
 
 					<!-- Endereço usando ViaCep APi -->
 					<div class="row">
-						<div class="input-field col s12" sec:authorize="hasRole('GERENTE')">
+						<div class="input-field col s6" sec:authorize="hasRole('GERENTE')">
+							<select class="browser-default"   th:field="*{profissao}" id="profissao" >
+								<option value="" disabled selected >--[Selecione]--</option>
+								<option th:each="p : ${profissoes}" th:value="${p.id}" th:text="${p.nome}"></option>
+
+							</select>
+							<label for="profissao" class="active">Profissão:</label>
+						</div>
+						<div class="input-field col s6" sec:authorize="hasRole('GERENTE')">
 							<select class="browser-default"   th:field="*{cargo}" id="cargo" >
 								<option value="" disabled selected >--[Selecione]--</option>
-								<option th:each="c : ${T(com.jwss.studio.springboot.curso.entity.Cargo).values()}" th:value="${c}" th:text="${c}"></option>
+								<option th:each="c : ${T(com.jwss.studio.springboot.curso.entity.Cargo).values()}" th:value="${c}" th:text="${c.nome}"></option>
 
 							</select>
 							<label for="cargo" class="active">Cargo:</label>
@@ -253,6 +261,10 @@
 	    <script>
 
 	        $(document).ready(function() {
+				$('#dataNascimento').datepicker({
+					showOthermonths:true,
+					format: 'yyyy-mm-dd'
+				});
 
 	            function limpa_formulário_cep() {
 	                // Limpa valores do formulário de cep.
