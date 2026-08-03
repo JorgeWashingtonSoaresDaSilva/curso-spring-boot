@@ -25,6 +25,7 @@
 			margin-top: 30px;
 		}
 	</style>
+
 </head>
 
 <body>
@@ -67,7 +68,7 @@
 		
 		<fieldset>
 			<legend>Cadastro de Pessoas</legend>
-		<div class="row">
+			<div class="row">
 			<br />
 			<!-- CORREÇÃO 2: Adicionada classe do Materialize para estilizar as mensagens de retorno (ex:Salvo com sucesso) -->
 			<div th:each="m : ${msg}" class="card-panel green lighten-4 green-text text-darken-4">
@@ -76,7 +77,8 @@
 			<br />
 
 			<!-- CORREÇÃO 3: Uso do th:action com barra inicial para evitar erros de rotas relativas ao editar -->
-			<form th:action="@{/salvarpessoa}" id="formpessoa" method="post" th:object="${pessoaobj}" class="col s12">
+			<form th:action="@{/salvarpessoa}" id="formpessoa" method="post" th:object="${pessoaobj}" class="col s12"
+				  enctype="multipart/form-data">
 				<div class="row">
 					<div class="input-field col s1">
 						<input  name="id" readonly="readonly" th:field="*{id}" id="id">
@@ -88,7 +90,7 @@
 					</div>
 					
 					
-					<div class="input-field col s4">
+					<div class="input-field col s3">
 						<input placeholder="Infome o Sobrenome da pessoa" name="sobrenome" th:field="*{sobrenome}" id="sobrenome" class="validate"
 							required="required">
 						<label for="sobrenome" class="active">Sobrenome:</label>
@@ -97,21 +99,53 @@
 					<input placeholder="Infome a idade da pessoa" name="idade" th:field="*{idade}" id="idade" class="validate" required="required">
 					<label for="idade" class="active">Idade:</label>
 					</div>
-					<div class="input-field col s3" sec:authorize="hasRole('GERENTE')">
-					<select class="browser-default" th:field="*{sexo}" >
+					<div class="input-field col s3">
+						<input id="dataNascimento" type="date" th:field="*{dataNascimento}"
+							   name="dataNascimento" placeholder="Data Nasc.">
+						<label for="dataNascimento" class="active">DataNascimento:</label>
+					</div>
+					<div class="row">
+						<div class="input-field col s4">
+							<label for="file" class="active">Curriculo:</label>
+							<input type="file" id="file" name="file" class="validate">
+
+					</div>
+					</div>
+
+					<div class="input-field col s6" sec:authorize="hasRole('GERENTE')">
+					<select class="browser-default" th:field="*{sexo}" id="sexo">
 						<option value="" disabled selected >--[Selecione]--</option>
 						<option value="MASCULINO" th:text="Masculino" ></option>
 						<option value="FEMININO" th:text="Feminino"></option>
 					</select>
 					<label for="sexo" class="active">Sexo:</label>
 					</div>
-					</div>
+
+
 					<!-- Endereço usando ViaCep APi -->
+					<div class="row">
+						<div class="input-field col s6" sec:authorize="hasRole('GERENTE')">
+							<select class="browser-default"   th:field="*{profissao}" id="profissao" >
+								<option value="" disabled selected >--[Selecione]--</option>
+								<option th:each="p : ${profissoes}" th:value="${p.id}" th:text="${p.nome}"></option>
+
+							</select>
+							<label for="profissao" class="active">Profissão:</label>
+						</div>
+						<div class="input-field col s6" sec:authorize="hasRole('GERENTE')">
+							<select class="browser-default"   th:field="*{cargo}" id="cargo" >
+								<option value="" disabled selected >--[Selecione]--</option>
+								<option th:each="c : ${T(com.jwss.studio.springboot.curso.entity.Cargo).values()}" th:value="${c}" th:text="${c.nome}"></option>
+
+							</select>
+							<label for="cargo" class="active">Cargo:</label>
+						</div>
 					<div class="input-field col s5">
 					<input placeholder="Infome o cep válido" name="cep" th:field="*{cep}" id="cep" class="validate"
 						required="required">
 					<label for="cep" class="active">Cep:</label>
 					</div>
+
 					<div class="input-field col s5">
 					<input placeholder="Infome a rua" name="rua" th:field="*{rua}" id="rua" class="validate"
 						required="required">
@@ -142,6 +176,8 @@
 						required="required">
 					<label for="ibge" class="active">IBGE:</label>
 					</div>
+					</div>
+				</div>
 					
 
 					
@@ -233,7 +269,12 @@
 	    <script>
 
 	        $(document).ready(function() {
-
+				// calendario js
+				$('#dataNascimento').datepicker({
+					showOthermonths:true,
+					format: 'yyyy-mm-dd'
+				});
+				// fim calendario js
 	            function limpa_formulário_cep() {
 	                // Limpa valores do formulário de cep.
 	                $("#rua").val("");
