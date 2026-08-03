@@ -1,17 +1,14 @@
 package com.jwss.studio.springboot.curso.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class PessoaEntity implements Serializable {
@@ -29,7 +26,16 @@ public class PessoaEntity implements Serializable {
 	private String sobrenome;
 	@Min(value = 18,message = "Idade invávilida")
 	private int idade;
+	@DateTimeFormat(pattern = "yyy-MM-dd")
+	@Temporal(TemporalType.DATE)
+	private Date dataNascimento;
 	private String sexo;
+	@Enumerated(EnumType.STRING)
+	private Cargo cargo;
+	@ManyToOne
+	private ProfissaoEntity profissao;
+	@Lob
+	private byte[] curriculo;
 
 	private String cep;
     private String rua;
@@ -109,9 +115,7 @@ public class PessoaEntity implements Serializable {
 	public void setTelefones(List<TelefoneEntity> telefones) {
 		this.telefones = telefones;
 	}
-	public String getNumero() {
-		return numero;
-	}
+	public String getNumero() {return numero;}
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
@@ -122,4 +126,27 @@ public class PessoaEntity implements Serializable {
 		this.sexo = sexo;
 	}
 
+	public ProfissaoEntity getProfissao() {
+		return profissao;
+	}
+	public void setProfissao(ProfissaoEntity profissao) {
+		this.profissao = profissao;
+	}
+	public Cargo getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(Cargo cargo) {
+		this.cargo = cargo;
+	}
+
+	public Date getDataNascimento() {return dataNascimento;}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	public byte[] getCurriculo() {return curriculo;}
+
+	public void setCurriculo(byte[] curriculo) {this.curriculo = curriculo;}
 }
