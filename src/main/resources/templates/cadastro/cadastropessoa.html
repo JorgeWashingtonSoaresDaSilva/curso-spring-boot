@@ -245,8 +245,10 @@
 					<td><a th:href="@{/telefones/{idpessoa}(idpessoa=${pessoa.id})}"><span
 								th:text="${pessoa.nome}"></span></a></td>
 					<td th:text="${pessoa.sobrenome}"></td>
-					<td><a th:href="@{/baixarCurriculo/{idpessoa}(idpessoa=${pessoa.id})}" class="blue-text"><i
-							class="material-icons left">download</i>Baixar</a></td>
+					<td><a th:if="${pessoa.curriculo != null}" th:href="@{/baixarCurriculo/{idpessoa}(idpessoa=${pessoa.id})}" class="blue-text"><i
+							class="material-icons left">download</i>Baixar</a>
+						<a th:if="${pessoa.curriculo == null}" style="color: #8b1014">Não existe</a>
+					</td>
 					<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}" class="blue-text"><i
 								class="material-icons left">edit</i>Editar</a></td>
 					<td><a th:href="@{/deletarpessoa/{idpessoa}(idpessoa=${pessoa.id})}" class="red-text">
