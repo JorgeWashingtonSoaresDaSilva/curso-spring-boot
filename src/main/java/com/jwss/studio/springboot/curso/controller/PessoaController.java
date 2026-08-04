@@ -73,13 +73,17 @@ public class PessoaController {
 			modelandView.addObject("msg", msg);
 			return modelandView;
 		}
-		if (file.getSize() > 0){
+		if (file.getSize() > 0){// cadastrando um curriculo
 			pessoa.setCurriculo(file.getBytes());
+			pessoa.setTipoFileCurriculo(file.getContentType());
+			pessoa.setNomeFileCurriculo(file.getOriginalFilename());
 		}else {
-			if (pessoa.getId() != null && pessoa.getId() > 0){
-				byte[] curriculoTemp;
-				curriculoTemp = pessoaService.carregaPessoa(pessoa.getId()).get().getCurriculo();
-				pessoa.setCurriculo(curriculoTemp);
+			if (pessoa.getId() != null && pessoa.getId() > 0){// editando um curriculo
+				PessoaEntity  pessoaTemp = pessoaService.carregaPessoa(pessoa.getId()).get();// carrega pessoa do banco
+				// carrega curriculo gravado no banco tip de arquivo, nome do arquivo
+				pessoa.setCurriculo(pessoaTemp.getCurriculo());
+				pessoa.setTipoFileCurriculo(pessoaTemp.getTipoFileCurriculo());
+				pessoa.setNomeFileCurriculo(pessoaTemp.getNomeFileCurriculo());
             }
 		}
 		pessoaService.salvar(pessoa);
@@ -92,6 +96,8 @@ public class PessoaController {
 
 		return andView;
 	}
+
+
 	@RequestMapping(method = RequestMethod.GET, value = "/listapessoas")
 	public ModelAndView pessoas(PessoaEntity pessoa) {
 		ModelAndView andView = new ModelAndView("cadastro/cadastropessoa");
@@ -101,6 +107,29 @@ public class PessoaController {
 		andView.addObject("pessoaobj",new PessoaEntity());
 		return andView;
 	}
+
+	@GetMapping("**/baixarCurriculo/{idpessoa}")
+	public void baixarCurriculo(@PathVariable("idpessoa") Long idpessoa,HttpServletResponse response ) throws IOException {
+		// consultar objeto pessoa no banco de dados
+		PessoaEntity pessoa = pessoaService.carregaPessoa(idpessoa).get();
+		if (pessoa.getCurriculo() != null){
+			// setar tamanho de resposta
+			response.setContentLength(pessoa.getCurriculo().length);
+
+			// tipo do arquivo para download ou pode ser generica application/octet-stream
+			response.setContentType(pessoa.getTipoFileCurriculo());
+
+			// define o cabeçalho da resposta
+			String headerKey = "Content-Disposition";
+			String headerValue = String.format("attachment; filename=\"%s\"",pessoa.getNomeFileCurriculo());
+			response.setHeader(headerKey,headerValue);
+			//finaliza a resposta passado arquivo
+			response.getOutputStream().write(pessoa.getCurriculo());
+
+
+		}
+	}
+
 	@GetMapping(value ="/editarpessoa/{idpessoa}")
 	public ModelAndView editar(@PathVariable("idpessoa") Long idpessoa) {
 

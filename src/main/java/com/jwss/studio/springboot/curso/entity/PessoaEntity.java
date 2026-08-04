@@ -36,6 +36,8 @@ public class PessoaEntity implements Serializable {
 	private ProfissaoEntity profissao;
 	@Lob
 	private byte[] curriculo;
+	private String nomeFileCurriculo;
+	private String tipoFileCurriculo;
 
 	private String cep;
     private String rua;
@@ -149,4 +151,12 @@ public class PessoaEntity implements Serializable {
 	public byte[] getCurriculo() {return curriculo;}
 
 	public void setCurriculo(byte[] curriculo) {this.curriculo = curriculo;}
+
+	public String getNomeFileCurriculo() {return nomeFileCurriculo;}
+
+	public void setNomeFileCurriculo(String nomeFileCurriculo) {this.nomeFileCurriculo = nomeFileCurriculo;}
+
+	public String getTipoFileCurriculo() {return tipoFileCurriculo;}
+
+	public void setTipoFileCurriculo(String tipoFileCurriculo) {this.tipoFileCurriculo = tipoFileCurriculo;}
 }
