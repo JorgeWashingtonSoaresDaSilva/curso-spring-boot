@@ -96,6 +96,8 @@ public class PessoaController {
 
 		return andView;
 	}
+
+
 	@RequestMapping(method = RequestMethod.GET, value = "/listapessoas")
 	public ModelAndView pessoas(PessoaEntity pessoa) {
 		ModelAndView andView = new ModelAndView("cadastro/cadastropessoa");
@@ -105,6 +107,29 @@ public class PessoaController {
 		andView.addObject("pessoaobj",new PessoaEntity());
 		return andView;
 	}
+
+	@GetMapping("**/baixarCurriculo/{idpessoa}")
+	public void baixarCurriculo(@PathVariable("idpessoa") Long idpessoa,HttpServletResponse response ) throws IOException {
+		// consultar objeto pessoa no banco de dados
+		PessoaEntity pessoa = pessoaService.carregaPessoa(idpessoa).get();
+		if (pessoa.getCurriculo() != null){
+			// setar tamanho de resposta
+			response.setContentLength(pessoa.getCurriculo().length);
+
+			// tipo do arquivo para download ou pode ser generica application/octet-stream
+			response.setContentType(pessoa.getTipoFileCurriculo());
+
+			// define o cabeçalho da resposta
+			String headerKey = "Content-Disposition";
+			String headerValue = String.format("attachment; filename=\"%s\"",pessoa.getNomeFileCurriculo());
+			response.setHeader(headerKey,headerValue);
+			//finaliza a resposta passado arquivo
+			response.getOutputStream().write(pessoa.getCurriculo());
+
+
+		}
+	}
+
 	@GetMapping(value ="/editarpessoa/{idpessoa}")
 	public ModelAndView editar(@PathVariable("idpessoa") Long idpessoa) {
 

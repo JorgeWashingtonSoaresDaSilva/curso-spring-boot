@@ -107,7 +107,7 @@
 					<div class="row">
 						<div class="input-field col s4">
 							<label for="file" class="active">Curriculo:</label>
-							<input type="file" id="file" name="file" class="validate">
+							<input type="file" id="file" name="file" class="file-field input-field">
 
 					</div>
 					</div>
@@ -233,7 +233,7 @@
 					<th>ID</th>
 					<th>Nome</th>
 					<th>Sobrenome</th>
-					<th>Idade</th>
+					<th>Cúrriculo</th>
 					<th>Editar</th>
 					<th>Deletar</th>
 				</tr>
@@ -245,7 +245,8 @@
 					<td><a th:href="@{/telefones/{idpessoa}(idpessoa=${pessoa.id})}"><span
 								th:text="${pessoa.nome}"></span></a></td>
 					<td th:text="${pessoa.sobrenome}"></td>
-					<td th:text="${pessoa.idade}"></td>
+					<td><a th:href="@{/baixarCurriculo/{idpessoa}(idpessoa=${pessoa.id})}" class="blue-text"><i
+							class="material-icons left">download</i>Baixar</a></td>
 					<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}" class="blue-text"><i
 								class="material-icons left">edit</i>Editar</a></td>
 					<td><a th:href="@{/deletarpessoa/{idpessoa}(idpessoa=${pessoa.id})}" class="red-text">
